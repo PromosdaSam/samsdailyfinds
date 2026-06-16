@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sam's Daily Finds — Top Products of the Day</title>
+  <meta name="description" content="Smart curation of the best deals on Amazon and more. Updated in real time — click and save!">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; frame-ancestors 'none';">
+  <meta property="og:title" content="🔥 Sam's Daily Finds — Top Products of the Day">
+  <meta property="og:description" content="Smart curation of the best deals — click a product and grab yours!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://samsdailyfinds.com/">
+  <meta property="og:locale" content="en_US">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange:      #ff6a00;
+      --orange-dk:   #e8430a;
+      --orange-lt:   #ff8c40;
+      --orange-xlt:  #fff0e6;
+      --bg:          #fff5ee;
+      --card:        #ffffff;
+      --border:      #ffd8bb;
+      --text:        #1a0800;
+      --text-2:      #5c3010;
+      --text-3:      #a06040;
+      --radius-card: 16px;
+      --radius-pill: 100px;
+      --shadow:      0 2px 16px rgba(255,106,0,0.08);
+      --shadow-hov:  0 8px 32px rgba(255,106,0,0.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Hero ─────────────────────────────────────────── */
+    .hero {
+      background: #ff7417;
+      padding: 52px 20px 80px;
+      text-align: center;
+      border-bottom-left-radius: 50% 48px;
+      border-bottom-right-radius: 50% 48px;
+    }
+
+    .hero-logo {
+      width: clamp(90px, 20vw, 130px);
+      height: clamp(90px, 20vw, 130px);
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 14px;
+      display: block;
+      margin-inline: auto;
+      border: 4px solid rgba(255,255,255,0.55);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      font-size: clamp(0.88rem, 2.4vw, 1rem);
+      color: #ffffff;
+      max-width: 400px;
+      margin-inline: auto;
+    }
+
+    /* ── Social pills (no Telegram/WhatsApp for EN) ───── */
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.45);
+      border: 2px solid rgba(0,0,0,0.14);
+      color: #1a0800;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .social-pill:hover { background: rgba(255,255,255,0.65); }
+
+    .pill-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ── Controls ─────────────────────────────────────── */
+    .controls {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 0;
+    }
+
+    .search-wrap {
+      position: relative;
+      max-width: 540px;
+      margin: 0 auto 20px;
+    }
+
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      color: var(--text-3);
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      padding: 13px 20px 13px 44px;
+      border: 2.5px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-size: 0.95rem;
+      background: var(--card);
+      color: var(--text);
+      outline: none;
+    }
+
+    #search:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,106,0,0.12);
+    }
+
+    #search::placeholder { color: var(--text-3); }
+
+    .cats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-bottom: 24px;
+    }
+
+    .cat-btn {
+      padding: 7px 15px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--text-2);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .cat-btn:hover { border-color: var(--orange-lt); color: var(--orange); }
+    .cat-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    /* ── Grid ─────────────────────────────────────────── */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--text-3);
+      display: none;
+    }
+
+    .empty span { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+    /* ── Product card ─────────────────────────────────── */
+    .product-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      box-shadow: var(--shadow-hov);
+      border-color: var(--orange-lt);
+    }
+
+    .card-link {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card-media {
+      aspect-ratio: 9/16;
+      background: linear-gradient(160deg, #ffad5c, #f05510);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .placeholder-media {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .placeholder-media span {
+      font-size: 3rem;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+    }
+
+    .placeholder-media small {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.72);
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.06);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .product-card:hover .play-icon { opacity: 1; }
+
+    .play-icon svg {
+      width: 42px;
+      height: 42px;
+      fill: rgba(255,255,255,0.9);
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.28));
+    }
+
+    .card-body {
+      padding: 11px 12px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .card-cat {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-cta {
+      display: block;
+      text-align: center;
+      margin-top: 6px;
+      padding: 8px;
+      border-radius: 8px;
+      background: var(--orange-xlt);
+      color: var(--orange-dk);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .product-card:hover .card-cta { background: var(--orange); color: #fff; }
+
+    /* ── Footer ───────────────────────────────────────── */
+    footer {
+      background: #ff7417;
+      color: rgba(255,255,255,0.72);
+      text-align: center;
+      padding: 26px 20px;
+      font-size: 0.82rem;
+    }
+
+    footer a { color: rgba(255,255,255,0.88); text-decoration: none; }
+    footer a:hover { color: #fff; text-decoration: underline; }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px 64px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 11px; padding-inline: 12px; }
+      .card-body { padding: 9px 10px 11px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero" role="banner">
+    <img src="logo.png" class="hero-logo" alt="Sam's Daily Finds Logo">
+    <h1>Sam's Daily Finds</h1>
+    <p>Top products of the day, curated for you — click and grab yours!</p>
+
+    <!-- No Telegram / WhatsApp for the international version -->
+    <div class="social-row" aria-label="Follow us">
+
+      <a href="https://pinterest.com/promosdasam" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
+        <svg class="pill-icon" viewBox="0 0 496 512" fill="currentColor" aria-hidden="true">
+          <path d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3.8-3.4 5-20.3 6.9-28.1.6-2.5.3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/>
+        </svg>
+        Pinterest
+      </a>
+
+      <a href="https://tiktok.com/@promosdasam" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+        <svg class="pill-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+          <path d="M448 209.9a210.1 210.1 0 0 1-122.8-39.3v178.7A162.6 162.6 0 1 1 185 188.3v89.9a74.6 74.6 0 1 0 52.2 71.2V0h88a121.2 121.2 0 0 0 1.9 22.2 122.2 122.2 0 0 0 54.3 79.8 121.4 121.4 0 0 0 66.6 20.1z"/>
+        </svg>
+        TikTok
+      </a>
+
+      <a href="https://instagram.com/promosdasam" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg class="pill-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+          <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+        </svg>
+        Instagram
+      </a>
+
+      <a href="https://facebook.com/promosdasam" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg class="pill-icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+          <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/>
+        </svg>
+        Facebook
+      </a>
+
+      <a href="https://youtube.com/@promosdasam" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg class="pill-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true">
+          <path d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6C14.9 167 14.9 256 14.9 256s0 89 11.4 131.9c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.1 48.3-47.8C561.1 345 561.1 256 561.1 256s0-89-11.4-131.9zM232.1 337.6V175.4l142.7 81.1-142.7 81.1z"/>
+        </svg>
+        YouTube
+      </a>
+
+    </div>
+  </header>
+
+  <!-- Search and filters -->
+  <section class="controls" aria-label="Filters and search">
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" id="search" placeholder="Search products..." aria-label="Search products" autocomplete="off">
+    </div>
+    <div class="cats" id="cats" role="group" aria-label="Categories"></div>
+  </section>
+
+  <!-- Product grid -->
+  <main>
+    <div class="grid" id="grid" aria-live="polite" aria-label="Products"></div>
+    <div class="empty" id="empty">
+      <span>🔍</span>
+      No products found for that search.
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="/privacidade.html">Privacy Policy</a>
+      <a href="https://pinterest.com/promosdasam" target="_blank" rel="noopener noreferrer">Pinterest</a>
+    </div>
+    <p>© 2026 Sam's Daily Finds · Affiliate links help keep this project running at no cost to you</p>
+  </footer>
+
+  <script>
+    /* ─────────────────────────────────────────────────────
+       PRODUCTS — add / remove products here
+       Fields:
+         id       → unique identifier
+         name     → product display name
+         category → must match an id from CATEGORIES below
+         video    → path to .mp4 file (or null)
+         link     → affiliate link
+    ───────────────────────────────────────────────────── */
+    const PRODUCTS = [
+      { id: "e001", name: "TWS Wireless Earbuds Noise Cancelling",     category: "electronics", video: null, link: "#" },
+      { id: "e002", name: "12-Cup Stainless Steel Coffee Maker",        category: "home",        video: null, link: "#" },
+      { id: "e003", name: "Premium Dry-Fit Sports T-Shirt",            category: "fashion",     video: null, link: "#" },
+      { id: "e004", name: "Vitamin C Brightening Serum 30ml",          category: "beauty",      video: null, link: "#" },
+      { id: "e005", name: "Women's Lightweight Running Shoes",         category: "sports",      video: null, link: "#" },
+      { id: "e006", name: "STEM Educational Toy Set 3+ Years",         category: "kids",        video: null, link: "#" },
+      { id: "e007", name: "Sports Smartwatch with Heart Rate & GPS",   category: "electronics", video: null, link: "#" },
+      { id: "e008", name: "Adjustable Brightness LED Desk Lamp",       category: "home",        video: null, link: "#" },
+    ];
+
+    const CATEGORIES = [
+      { id: "all",         label: "All" },
+      { id: "electronics", label: "Electronics" },
+      { id: "home",        label: "Home" },
+      { id: "fashion",     label: "Fashion" },
+      { id: "beauty",      label: "Beauty" },
+      { id: "sports",      label: "Sports" },
+      { id: "kids",        label: "Kids" },
+    ];
+
+    const CAT_LABEL = Object.fromEntries(
+      CATEGORIES.filter(c => c.id !== "all").map(c => [c.id, c.label])
+    );
+
+    let activeCategory = "all";
+    let searchQuery    = "";
+
+    function buildCategories() {
+      const container = document.getElementById("cats");
+      CATEGORIES.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.className = "cat-btn" + (cat.id === "all" ? " active" : "");
+        btn.textContent = cat.label;
+        btn.dataset.cat = cat.id;
+        btn.setAttribute("aria-pressed", cat.id === "all" ? "true" : "false");
+        btn.addEventListener("click", () => {
+          activeCategory = cat.id;
+          document.querySelectorAll(".cat-btn").forEach(b => {
+            b.classList.toggle("active", b.dataset.cat === cat.id);
+            b.setAttribute("aria-pressed", b.dataset.cat === cat.id ? "true" : "false");
+          });
+          render();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+                      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    function cardHTML(p) {
+      const catLabel = CAT_LABEL[p.category] || p.category;
+      const media = p.video
+        ? `<video src="${esc(p.video)}" autoplay muted loop playsinline preload="metadata"></video>`
+        : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
+
+      return `
+        <article class="product-card" data-category="${esc(p.category)}">
+          <a href="${esc(p.link)}" class="card-link"
+             target="_blank" rel="noopener noreferrer sponsored"
+             aria-label="${esc(p.name)} — see deal">
+            <div class="card-media">
+              ${media}
+              <div class="play-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <span class="card-cat">${esc(catLabel)}</span>
+              <h2 class="card-name">${esc(p.name)}</h2>
+              <span class="card-cta">See deal →</span>
+            </div>
+          </a>
+        </article>`;
+    }
+
+    function render() {
+      const q = searchQuery.toLowerCase().trim();
+      const filtered = PRODUCTS.filter(p => {
+        const matchCat   = activeCategory === "all" || p.category === activeCategory;
+        const matchQuery = !q || p.name.toLowerCase().includes(q);
+        return matchCat && matchQuery;
+      });
+      const grid  = document.getElementById("grid");
+      const empty = document.getElementById("empty");
+      grid.innerHTML = filtered.map(cardHTML).join("");
+      empty.style.display = filtered.length === 0 ? "block" : "none";
+    }
+
+    document.getElementById("search").addEventListener("input", e => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    buildCategories();
+    render();
+  </script>
+</body>
+</html>
