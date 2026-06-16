@@ -92,22 +92,22 @@
     .social-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       background: rgba(255,255,255,0.45);
       border: 2px solid rgba(0,0,0,0.14);
-      color: #1a0800;
+      color: #ffffff;
       text-decoration: none;
-      padding: 8px 16px;
+      padding: 10px 20px;
       border-radius: var(--radius-pill);
-      font-size: 0.84rem;
+      font-size: 0.95rem;
       font-weight: 600;
     }
 
     .social-pill:hover { background: rgba(255,255,255,0.65); }
 
     .pill-icon {
-      width: 16px;
-      height: 16px;
+      width: 19px;
+      height: 19px;
       flex-shrink: 0;
     }
 
@@ -338,6 +338,47 @@
       flex-wrap: wrap;
     }
 
+    /* ── New This Week ────────────────────────────────── */
+    .novidades-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 8px;
+    }
+
+    .novidades-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--orange-xlt);
+      color: var(--orange-dk);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .novidades-strip {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .novidades-strip::-webkit-scrollbar { height: 4px; }
+    .novidades-strip::-webkit-scrollbar-track { background: var(--border); border-radius: 4px; }
+    .novidades-strip::-webkit-scrollbar-thumb { background: var(--orange-lt); border-radius: 4px; }
+
+    .novidades-strip .product-card {
+      min-width: 160px;
+      max-width: 190px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+    }
+
     /* ── Responsive ───────────────────────────────────── */
     @media (max-width: 600px) {
       .hero { padding: 40px 16px 64px; }
@@ -399,6 +440,12 @@
     </div>
   </header>
 
+  <!-- New This Week -->
+  <section class="novidades-section" id="novidades-section" aria-label="New this week" style="display:none">
+    <span class="novidades-label">🆕 New This Week</span>
+    <div class="novidades-strip" id="novidades-strip"></div>
+  </section>
+
   <!-- Search and filters -->
   <section class="controls" aria-label="Filters and search">
     <div class="search-wrap">
@@ -438,14 +485,14 @@
          link     → affiliate link
     ───────────────────────────────────────────────────── */
     const PRODUCTS = [
-      { id: "e001", name: "TWS Wireless Earbuds Noise Cancelling",     category: "electronics", video: null, link: "#" },
-      { id: "e002", name: "12-Cup Stainless Steel Coffee Maker",        category: "home",        video: null, link: "#" },
-      { id: "e003", name: "Premium Dry-Fit Sports T-Shirt",            category: "fashion",     video: null, link: "#" },
-      { id: "e004", name: "Vitamin C Brightening Serum 30ml",          category: "beauty",      video: null, link: "#" },
-      { id: "e005", name: "Women's Lightweight Running Shoes",         category: "sports",      video: null, link: "#" },
-      { id: "e006", name: "STEM Educational Toy Set 3+ Years",         category: "kids",        video: null, link: "#" },
-      { id: "e007", name: "Sports Smartwatch with Heart Rate & GPS",   category: "electronics", video: null, link: "#" },
-      { id: "e008", name: "Adjustable Brightness LED Desk Lamp",       category: "home",        video: null, link: "#" },
+      { id: "e001", name: "TWS Wireless Earbuds Noise Cancelling",     category: "electronics", video: null, link: "#", date: "2026-06-16" },
+      { id: "e002", name: "12-Cup Stainless Steel Coffee Maker",        category: "home",        video: null, link: "#", date: "2026-06-15" },
+      { id: "e003", name: "Premium Dry-Fit Sports T-Shirt",            category: "fashion",     video: null, link: "#", date: "2026-06-14" },
+      { id: "e004", name: "Vitamin C Brightening Serum 30ml",          category: "beauty",      video: null, link: "#", date: "2026-06-13" },
+      { id: "e005", name: "Women's Lightweight Running Shoes",         category: "sports",      video: null, link: "#", date: "2026-06-12" },
+      { id: "e006", name: "STEM Educational Toy Set 3+ Years",         category: "kids",        video: null, link: "#", date: "2026-06-05" },
+      { id: "e007", name: "Sports Smartwatch with Heart Rate & GPS",   category: "electronics", video: null, link: "#", date: "2026-06-16" },
+      { id: "e008", name: "Adjustable Brightness LED Desk Lamp",       category: "home",        video: null, link: "#", date: "2026-06-04" },
     ];
 
     const CATEGORIES = [
@@ -529,12 +576,23 @@
       empty.style.display = filtered.length === 0 ? "block" : "none";
     }
 
+    function renderNovidades() {
+      const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const recentes = PRODUCTS.filter(p => p.date && new Date(p.date) >= cutoff);
+      const section  = document.getElementById("novidades-section");
+      const strip    = document.getElementById("novidades-strip");
+      if (recentes.length === 0) return;
+      strip.innerHTML = recentes.map(cardHTML).join("");
+      section.style.display = "block";
+    }
+
     document.getElementById("search").addEventListener("input", e => {
       searchQuery = e.target.value;
       render();
     });
 
     buildCategories();
+    renderNovidades();
     render();
   </script>
 </body>
