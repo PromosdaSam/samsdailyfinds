@@ -7,7 +7,7 @@
   <meta name="description" content="Smart curation of the best deals on Amazon and more. Updated in real time — click and save!">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; frame-ancestors 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;">
   <meta property="og:title" content="🔥 Sam's Daily Finds — Top Products of the Day">
   <meta property="og:description" content="Smart curation of the best deals — click a product and grab yours!">
   <meta property="og:type" content="website">
@@ -51,6 +51,7 @@
       text-align: center;
       border-bottom-left-radius: 50% 48px;
       border-bottom-right-radius: 50% 48px;
+      position: relative;
     }
 
     .hero-logo {
@@ -338,6 +339,45 @@
       flex-wrap: wrap;
     }
 
+    /* ── Dark mode ────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg:         #18181b;
+      --card:       #27272a;
+      --border:     #3d2e20;
+      --text:       #f0e8e0;
+      --text-2:     #c8a070;
+      --text-3:     #8a6050;
+      --shadow:     0 2px 16px rgba(0,0,0,0.35);
+      --shadow-hov: 0 8px 32px rgba(0,0,0,0.55);
+    }
+
+    [data-theme="dark"] .card-cta {
+      background: rgba(255,116,23,0.15);
+      color: var(--orange-lt);
+    }
+
+    body { transition: background 0.25s, color 0.25s; }
+
+    .theme-toggle {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.38);
+      color: #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .theme-toggle:hover { background: rgba(255,255,255,0.32); }
+
     /* ── New This Week ────────────────────────────────── */
     .novidades-section {
       max-width: 1100px;
@@ -346,17 +386,23 @@
     }
 
     .novidades-label {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 7px;
-      background: var(--orange-xlt);
+      gap: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
       color: var(--orange-dk);
-      border: 2px solid var(--border);
-      border-radius: var(--radius-pill);
-      padding: 6px 16px;
-      font-size: 0.84rem;
-      font-weight: 700;
       margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .novidades-label::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
     }
 
     .novidades-strip {
@@ -390,6 +436,7 @@
 <body>
 
   <header class="hero" role="banner">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
     <img src="logo.png" class="hero-logo" alt="Sam's Daily Finds Logo">
     <h1>Sam's Daily Finds</h1>
     <p>Top products of the day, curated for you — click and grab yours!</p>
@@ -442,7 +489,7 @@
 
   <!-- New This Week -->
   <section class="novidades-section" id="novidades-section" aria-label="New this week" style="display:none">
-    <span class="novidades-label">🆕 New This Week</span>
+    <h2 class="novidades-label">New This Week</h2>
     <div class="novidades-strip" id="novidades-strip"></div>
   </section>
 
@@ -585,6 +632,20 @@
       strip.innerHTML = recentes.map(cardHTML).join("");
       section.style.display = "block";
     }
+
+    (function initTheme() {
+      const root  = document.documentElement;
+      const btn   = document.getElementById("theme-toggle");
+      const saved = localStorage.getItem("theme") || "light";
+      root.setAttribute("data-theme", saved);
+      btn.textContent = saved === "dark" ? "☀️" : "🌙";
+      btn.addEventListener("click", () => {
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        btn.textContent = next === "dark" ? "☀️" : "🌙";
+      });
+    })();
 
     document.getElementById("search").addEventListener("input", e => {
       searchQuery = e.target.value;
