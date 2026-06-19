@@ -476,6 +476,37 @@
       transition: background 0.2s, transform 0.15s;
     }
     .load-more-btn:hover { background: var(--orange-dk); transform: translateY(-1px); }
+
+    /* ── Multi-product cards ──────────────────────────── */
+    .card-products {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .card-cta-multi {
+      display: block;
+      text-align: center;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: var(--orange-xlt);
+      color: var(--orange-dk);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .card-cta-multi:hover { background: var(--orange); color: #fff; }
+
+    .card-multi-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
   </style>
 </head>
 <body>
@@ -602,17 +633,42 @@
           ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
+      const mediaBlock = `
+        <div class="card-media">
+          ${media}
+          <div class="play-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+          </div>
+        </div>`;
+
+      const related = Array.isArray(p.related_products) ? p.related_products : [];
+
+      if (related.length > 1) {
+        // Compilação — vários botões, sem <a> wrapper no card inteiro
+        const buttons = related.map(rp =>
+          `<a href="${esc(rp.link)}" class="card-cta-multi"
+              target="_blank" rel="noopener noreferrer sponsored"
+              aria-label="${esc(rp.label || 'Shop item')} — see deal">${esc(rp.label || 'Shop →')}</a>`
+        ).join('');
+        return `
+          <article class="product-card" data-category="${esc(p.category)}">
+            ${mediaBlock}
+            <div class="card-body">
+              <span class="card-cat">${esc(catLabel)}</span>
+              <h2 class="card-name">${esc(p.name)}</h2>
+              <p class="card-multi-label">Shop items in this video</p>
+              <div class="card-products">${buttons}</div>
+            </div>
+          </article>`;
+      }
+
+      // Produto único — card inteiro clicável
       return `
         <article class="product-card" data-category="${esc(p.category)}">
           <a href="${esc(p.link)}" class="card-link"
              target="_blank" rel="noopener noreferrer sponsored"
              aria-label="${esc(p.name)} — see deal">
-            <div class="card-media">
-              ${media}
-              <div class="play-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
-              </div>
-            </div>
+            ${mediaBlock}
             <div class="card-body">
               <span class="card-cat">${esc(catLabel)}</span>
               <h2 class="card-name">${esc(p.name)}</h2>
