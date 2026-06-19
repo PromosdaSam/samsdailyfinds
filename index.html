@@ -657,30 +657,31 @@
       attachVideoLazy(strip);
     }
 
-    const videoObserver = typeof IntersectionObserver !== 'undefined'
-      ? new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            const video = entry.target;
-            if (video.dataset.src && !video.src) {
-              video.src = video.dataset.src;
-              video.addEventListener('canplay', () => {
-                video.classList.add('loaded');
-                video.closest('.card-media')?.classList.add('media-loaded');
-              }, { once: true });
-            }
-            videoObserver.unobserve(video);
-          });
-        }, { rootMargin: '300px 0px' })
-      : null;
-
     function markLoaded(el) {
       el.classList.add('loaded');
       el.closest('.card-media')?.classList.add('media-loaded');
     }
 
+    function loadVideo(video) {
+      if (video.src || !video.dataset.src) return;
+      video.src = video.dataset.src;
+      video.load();
+      video.addEventListener('loadedmetadata', () => markLoaded(video), { once: true });
+      // Safety fallback: show after 3s even if loadedmetadata is slow
+      setTimeout(() => markLoaded(video), 3000);
+    }
+
+    const videoObserver = typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            loadVideo(entry.target);
+            videoObserver.unobserve(entry.target);
+          });
+        }, { rootMargin: '300px 0px' })
+      : null;
+
     function attachVideoLazy(container) {
-      // Images: fire immediately if already cached, else on load
       container.querySelectorAll('img.media-img').forEach(img => {
         if (img.complete && img.naturalWidth > 0) {
           markLoaded(img);
@@ -689,12 +690,11 @@
           img.addEventListener('error', () => img.closest('.card-media')?.classList.add('media-loaded'), { once: true });
         }
       });
-      // Videos: lazy-load via IntersectionObserver
       container.querySelectorAll('video[data-src]').forEach(video => {
         if (videoObserver) {
           videoObserver.observe(video);
         } else {
-          video.src = video.dataset.src;
+          loadVideo(video);
         }
       });
     }
@@ -713,12 +713,8 @@
         media.addEventListener('mouseenter', () => {
           timer = setTimeout(() => {
             if (!video.src && video.dataset.src) {
-              video.src = video.dataset.src;
-              video.addEventListener('canplay', () => {
-                video.classList.add('loaded');
-                media.classList.add('media-loaded');
-                doPlay();
-              }, { once: true });
+              loadVideo(video);
+              video.addEventListener('canplay', doPlay, { once: true });
             } else if (video.readyState >= 2) {
               doPlay();
             } else {
