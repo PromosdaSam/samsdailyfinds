@@ -7,7 +7,7 @@
   <meta name="description" content="Smart curation of the best deals on Amazon and more. Updated in real time — click and save!">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images-na.ssl-images-amazon.com https://m.media-amazon.com; media-src 'self' blob:; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;">
   <meta property="og:title" content="🔥 Sam's Daily Finds — Top Products of the Day">
   <meta property="og:description" content="Smart curation of the best deals — click a product and grab yours!">
   <meta property="og:type" content="website">
@@ -563,7 +563,9 @@
       const catLabel = CAT_LABEL[p.category] || p.category;
       const media = p.video
         ? `<video src="${esc(p.video)}" autoplay muted loop playsinline preload="metadata"></video>`
-        : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
+        : p.image
+          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
+          : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
       return `
         <article class="product-card" data-category="${esc(p.category)}">
