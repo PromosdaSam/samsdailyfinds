@@ -594,17 +594,12 @@
                       .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
 
-    function onImgLoad(img) {
-      img.classList.add('loaded');
-      img.closest('.card-media').classList.add('media-loaded');
-    }
-
     function cardHTML(p) {
       const catLabel = CAT_LABEL[p.category] || p.category;
       const media = p.video
         ? `<video data-src="${esc(p.video)}" muted loop playsinline preload="none" class="media-video"></video>`
         : p.image
-          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="media-img" style="width:100%;height:100%;object-fit:cover;" onload="onImgLoad(this)">`
+          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
       return `
@@ -679,7 +674,22 @@
         }, { rootMargin: '300px 0px' })
       : null;
 
+    function markLoaded(el) {
+      el.classList.add('loaded');
+      el.closest('.card-media')?.classList.add('media-loaded');
+    }
+
     function attachVideoLazy(container) {
+      // Images: fire immediately if already cached, else on load
+      container.querySelectorAll('img.media-img').forEach(img => {
+        if (img.complete && img.naturalWidth > 0) {
+          markLoaded(img);
+        } else {
+          img.addEventListener('load',  () => markLoaded(img), { once: true });
+          img.addEventListener('error', () => img.closest('.card-media')?.classList.add('media-loaded'), { once: true });
+        }
+      });
+      // Videos: lazy-load via IntersectionObserver
       container.querySelectorAll('video[data-src]').forEach(video => {
         if (videoObserver) {
           videoObserver.observe(video);
