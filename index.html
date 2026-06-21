@@ -911,6 +911,36 @@
       .then(data => { PRODUCTS.push(...data); })
       .catch(() => {})
       .finally(() => { buildCategories(); renderNovidades(); render(); });
+
+    /* ── Links Modal ─────────────────────────────────────────────── */
+    const LINK_MODAL_DATA = {};
+
+    function openLinksModal(productId) {
+      const data = LINK_MODAL_DATA[productId];
+      if (!data) return;
+      document.getElementById('modal-product-name').textContent = data.name;
+      document.getElementById('modal-links-list').innerHTML = data.links.map((l, i) =>
+        '<a href="' + esc(l.link) + '" class="modal-link" target="_blank" rel="noopener noreferrer sponsored">' +
+        '<span class="modal-link-num">' + (i + 1) + '</span>' +
+        '<span class="modal-link-text">' + esc(l.label || ('Item ' + (i + 1))) + '</span>' +
+        '<span class="modal-link-arrow">\u2192</span>' +
+        '</a>'
+      ).join('');
+      const modal = document.getElementById('links-modal');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      modal.querySelector('.modal-box').scrollTop = 0;
+    }
+
+    function closeLinksModal() {
+      document.getElementById('links-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLinksModal();
+    });
+
   </script>
 
   <!-- Links Modal -->
