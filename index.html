@@ -944,11 +944,7 @@
       if (!data) return;
       document.getElementById('modal-product-name').textContent = data.name;
       document.getElementById('modal-links-list').innerHTML = data.links.map((l, i) => {
-        const raw = l.label || '';
-        const isGeneric = !raw || raw.startsWith('Item ');
-        const name = data.name || '';
-        const short = name.length > 30 ? name.slice(0, 30) + '\u2026' : name;
-        const labelText = isGeneric ? (short + (data.links.length > 1 ? ' #' + (i + 1) : '')) : raw;
+        const labelText = l.label || (data.links.length > 1 ? 'Product #' + (i + 1) : (data.name || 'See on Amazon'));
         return '<a href="' + esc(l.link) + '" class="modal-link" target="_blank" rel="noopener noreferrer sponsored">' +
         '<span class="modal-link-num">' + (i + 1) + '</span>' +
         '<span class="modal-link-text">' + esc(labelText) + '</span>' +
