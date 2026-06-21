@@ -297,6 +297,30 @@
     }
     .card-media img.loaded, .card-media video.loaded { opacity: 1; }
 
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .card-media::after {
+      content: '';
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 3px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.85);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spin 0.75s linear infinite;
+      z-index: 3;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .card-media.media-loaded::after {
+      opacity: 0;
+      animation: none;
+    }
+
     .play-icon svg {
       width: 42px;
       height: 42px;
