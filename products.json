@@ -1,10 +1,43 @@
 [
   {
     "id": "B0BS6ZGG95",
-    "name": "5 frequently used appliances in my kitchen    ",
+    "name": "5 frequently used appliances in my kitchen",
     "category": "home",
-    "image": "nan",
+    "video": "https://videos.samsdailyfinds.com/5_frequently_used_appliances_in_my_kitchen_110.mp4",
+    "image": "https://images-na.ssl-images-amazon.com/images/P/B0BS6ZGG95.01.LZZZZZZZ.jpg",
     "link": "https://www.amazon.com/dp/B0BS6ZGG95?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+    "related_products": [
+      {
+        "asin": "B0BS6ZGG95",
+        "link": "https://www.amazon.com/dp/B0BS6ZGG95?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 1"
+      },
+      {
+        "asin": "B0CNBS6X1X",
+        "link": "https://www.amazon.com/dp/B0CNBS6X1X?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 2"
+      },
+      {
+        "asin": "B09CZ2G9W3",
+        "link": "https://www.amazon.com/dp/B09CZ2G9W3?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 3"
+      },
+      {
+        "asin": "B0BKGHZR5J",
+        "link": "https://www.amazon.com/dp/B0BKGHZR5J?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 4"
+      },
+      {
+        "asin": "B0CQK5N7J2",
+        "link": "https://www.amazon.com/dp/B0CQK5N7J2?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 5"
+      },
+      {
+        "asin": "B0CQK68FS4",
+        "link": "https://www.amazon.com/dp/B0CQK68FS4?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+        "label": "Item 6"
+      }
+    ],
     "date": "2026-06-21"
   },
   {
