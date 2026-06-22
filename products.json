@@ -20,7 +20,7 @@
       {
         "asin": "B0C2KLZ831",
         "link": "https://www.amazon.com/dp/B0C2KLZ831?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "360\u00b0 Rotating Purifier"
+        "label": "360° Rotating Purifier"
       },
       {
         "asin": "B096LMZ9FS",
@@ -51,45 +51,46 @@
     "video": "https://videos.samsdailyfinds.com/5_frequently_lofi.mp4",
     "image": "https://images-na.ssl-images-amazon.com/images/P/B0BS6ZGG95.01.LZZZZZZZ.jpg",
     "link": "https://www.amazon.com/dp/B0BS6ZGG95?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
+    "date": "2026-06-21",
     "related_products": [
       {
         "asin": "B0BS6ZGG95",
         "link": "https://www.amazon.com/dp/B0BS6ZGG95?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 1"
+        "label": "Rice Washer Bowl"
       },
       {
         "asin": "B0CNBS6X1X",
         "link": "https://www.amazon.com/dp/B0CNBS6X1X?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 2"
+        "label": "Cabinet Trash Can"
       },
       {
         "asin": "B09CZ2G9W3",
         "link": "https://www.amazon.com/dp/B09CZ2G9W3?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 3"
+        "label": "Sink Caddy Rack"
       },
       {
         "asin": "B0BKGHZR5J",
         "link": "https://www.amazon.com/dp/B0BKGHZR5J?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 4"
+        "label": "Sink Corner Strainer"
       },
       {
         "asin": "B0CQK5N7J2",
         "link": "https://www.amazon.com/dp/B0CQK5N7J2?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 5"
+        "label": "Fridge Storage Box (S)"
       },
       {
         "asin": "B0CQK68FS4",
         "link": "https://www.amazon.com/dp/B0CQK68FS4?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
-        "label": "Item 6"
+        "label": "Fridge Storage Box (L)"
       }
-    ],
-    "date": "2026-06-21"
+    ]
   },
   {
     "id": "B0C3D58X1B",
     "name": "ORDORA Pots and Pans Organizer under Cabinet, 20.8\" Height Heavy Duty 120LBS Pots Pans Organizer",
     "category": "home",
-    "video": "https://videos.samsdailyfinds.com/ORDORA_Pots_and_Pans_Organizer_unde_0.mp4",
+    "video": null,
+    "image": "https://m.media-amazon.com/images/P/B0C3D58X1B.01.LZZZZZZZ.jpg",
     "link": "https://www.amazon.com/dp/B0C3D58X1B?tag=samsdailyfi04-20-ig&linkCode=ogi&th=1",
     "date": "2026-06-19"
   }
