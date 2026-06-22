@@ -297,30 +297,6 @@
     }
     .card-media img.loaded, .card-media video.loaded { opacity: 1; }
 
-    @keyframes spin {
-      to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    .card-media::after {
-      content: '';
-      position: absolute;
-      width: 34px;
-      height: 34px;
-      border: 3px solid rgba(255,255,255,0.25);
-      border-top-color: rgba(255,255,255,0.85);
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: spin 0.75s linear infinite;
-      z-index: 3;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-    .card-media.media-loaded::after {
-      opacity: 0;
-      animation: none;
-    }
-
     .play-icon svg {
       width: 42px;
       height: 42px;
@@ -361,13 +337,13 @@
       margin-top: 6px;
       padding: 8px;
       border-radius: 8px;
-      background: var(--orange);
-      color: #fff;
+      background: var(--orange-xlt);
+      color: var(--orange-dk);
       font-size: 0.78rem;
       font-weight: 700;
     }
 
-    .product-card:hover .card-cta { background: var(--orange-dk); }
+    .product-card:hover .card-cta { background: var(--orange); color: #fff; }
 
     /* ── Footer ───────────────────────────────────────── */
     footer {
@@ -531,105 +507,6 @@
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
-    /* ── Links Modal ─────────────────────────────────── */
-    #links-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      align-items: flex-end;
-      justify-content: center;
-    }
-    @media (min-width: 600px) {
-      #links-modal { align-items: center; }
-    }
-    .modal-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.52);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-    }
-    .modal-box {
-      position: relative;
-      z-index: 1;
-      background: var(--card);
-      border-radius: 20px 20px 0 0;
-      padding: 28px 20px 36px;
-      width: 100%;
-      max-width: 480px;
-      max-height: 82vh;
-      overflow-y: auto;
-      box-shadow: 0 -4px 40px rgba(0,0,0,0.22);
-      animation: slideUp 0.25s ease;
-    }
-    @media (min-width: 600px) {
-      .modal-box { border-radius: 20px; margin: 20px; animation: fadeIn 0.2s ease; }
-    }
-    @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes fadeIn  { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
-    .modal-close {
-      position: absolute;
-      top: 14px; right: 14px;
-      background: var(--border);
-      border: none;
-      border-radius: 50%;
-      width: 34px; height: 34px;
-      font-size: 1rem;
-      cursor: pointer;
-      color: var(--text-2);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-    }
-    .modal-close:hover { background: var(--orange-lt); color: #fff; }
-    .modal-product-name {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-      padding-right: 44px;
-      line-height: 1.4;
-    }
-    .modal-subtitle {
-      font-size: 0.72rem;
-      color: var(--text-3);
-      margin-bottom: 18px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-    }
-    .modal-links-list { display: flex; flex-direction: column; gap: 9px; }
-    .modal-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 16px;
-      background: var(--orange-xlt);
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      text-decoration: none;
-      color: var(--orange-dk);
-      font-weight: 700;
-      font-size: 0.88rem;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    .modal-link:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
-    .modal-link-num {
-      background: var(--orange);
-      color: #fff;
-      border-radius: 50%;
-      width: 27px; height: 27px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-    .modal-link:hover .modal-link-num { background: rgba(255,255,255,0.28); }
-    .modal-link-text { flex: 1; }
-    .modal-link-arrow { font-size: 1rem; opacity: 0.7; }
-    .card-cta-links { background: var(--orange); color: #fff; }
-    .product-card:hover .card-cta-links { background: var(--orange-dk); }
-
   </style>
 </head>
 <body>
@@ -767,19 +644,20 @@
       const related = Array.isArray(p.related_products) ? p.related_products : [];
 
       if (related.length > 1) {
-        LINK_MODAL_DATA[p.id] = { name: p.name, links: related };
+        // Compilação — vários botões, sem <a> wrapper no card inteiro
+        const buttons = related.map(rp =>
+          `<a href="${esc(rp.link)}" class="card-cta-multi"
+              target="_blank" rel="noopener noreferrer sponsored"
+              aria-label="${esc(rp.label || 'Shop item')} — see deal">${esc(rp.label || 'Shop →')}</a>`
+        ).join('');
         return `
           <article class="product-card" data-category="${esc(p.category)}">
-            <div class="card-link" role="button" tabindex="0"
-                 aria-label="${esc(p.name)} — get product links"
-                 onclick="openLinksModal('${esc(p.id)}')"
-                 onkeydown="if(event.key==='Enter')openLinksModal('${esc(p.id)}')">
-              ${mediaBlock}
-              <div class="card-body">
-                <span class="card-cat">${esc(catLabel)}</span>
-                <h2 class="card-name">${esc(p.name)}</h2>
-                <span class="card-cta card-cta-links">🛒 Get links (${related.length}) →</span>
-              </div>
+            ${mediaBlock}
+            <div class="card-body">
+              <span class="card-cat">${esc(catLabel)}</span>
+              <h2 class="card-name">${esc(p.name)}</h2>
+              <p class="card-multi-label">Shop items in this video</p>
+              <div class="card-products">${buttons}</div>
             </div>
           </article>`;
       }
@@ -794,7 +672,7 @@
             <div class="card-body">
               <span class="card-cat">${esc(catLabel)}</span>
               <h2 class="card-name">${esc(p.name)}</h2>
-              <span class="card-cta">Get link →</span>
+              <span class="card-cta">See deal →</span>
             </div>
           </a>
         </article>`;
@@ -806,7 +684,7 @@
         const matchCat   = activeCategory === "all" || p.category === activeCategory;
         const matchQuery = !q || p.name.toLowerCase().includes(q);
         return matchCat && matchQuery;
-      });
+      }).sort((a, b) => a.name.localeCompare(b.name));
       const grid    = document.getElementById("grid");
       const empty   = document.getElementById("empty");
       const lmWrap  = document.getElementById("load-more-wrap");
@@ -935,49 +813,6 @@
       .then(data => { PRODUCTS.push(...data); })
       .catch(() => {})
       .finally(() => { buildCategories(); renderNovidades(); render(); });
-
-    /* ── Links Modal ─────────────────────────────────────────────── */
-    const LINK_MODAL_DATA = {};
-
-    function openLinksModal(productId) {
-      const data = LINK_MODAL_DATA[productId];
-      if (!data) return;
-      document.getElementById('modal-product-name').textContent = data.name;
-      document.getElementById('modal-links-list').innerHTML = data.links.map((l, i) => {
-        const labelText = l.label || (data.links.length > 1 ? 'Product #' + (i + 1) : (data.name || 'See on Amazon'));
-        return '<a href="' + esc(l.link) + '" class="modal-link" target="_blank" rel="noopener noreferrer sponsored">' +
-        '<span class="modal-link-num">' + (i + 1) + '</span>' +
-        '<span class="modal-link-text">' + esc(labelText) + '</span>' +
-        '<span class="modal-link-arrow">\u2192</span>' +
-        '</a>';
-      }).join('');
-      const modal = document.getElementById('links-modal');
-      modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      modal.querySelector('.modal-box').scrollTop = 0;
-    }
-
-    function closeLinksModal() {
-      document.getElementById('links-modal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeLinksModal();
-    });
-
   </script>
-
-  <!-- Links Modal -->
-  <div id="links-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-name">
-    <div class="modal-backdrop" onclick="closeLinksModal()"></div>
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeLinksModal()" aria-label="Close">✕</button>
-      <h3 id="modal-product-name" class="modal-product-name"></h3>
-      <p class="modal-subtitle">Shop items in this video</p>
-      <div id="modal-links-list" class="modal-links-list"></div>
-    </div>
-  </div>
-
 </body>
 </html>
