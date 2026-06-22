@@ -458,6 +458,14 @@
       .card-body { padding: 9px 10px 11px; }
     }
 
+    .result-count {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-3);
+      padding-bottom: 12px;
+      font-weight: 600;
+    }
+
     .load-more-wrap {
       display: none;
       justify-content: center;
@@ -546,6 +554,7 @@
       <input type="search" id="search" placeholder="Search products..." aria-label="Search products" autocomplete="off">
     </div>
     <div class="cats" id="cats" role="group" aria-label="Categories"></div>
+    <p class="result-count" id="result-count"></p>
   </section>
 
   <!-- Product grid -->
@@ -689,6 +698,10 @@
       const empty   = document.getElementById("empty");
       const lmWrap  = document.getElementById("load-more-wrap");
       const toShow  = filtered.slice(0, visibleCount);
+      document.getElementById("result-count").textContent =
+        filtered.length === 0 ? "" :
+        filtered.length === 1 ? "1 product" :
+        `${filtered.length} products`;
       grid.innerHTML = toShow.map(cardHTML).join("");
       empty.style.display  = filtered.length === 0 ? "block" : "none";
       lmWrap.style.display = toShow.length < filtered.length ? "flex" : "none";
