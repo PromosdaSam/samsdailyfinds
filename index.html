@@ -525,17 +525,7 @@
       line-height: 1;
     }
 
-    .modal-media {
-      aspect-ratio: 9/16;
-      background: linear-gradient(160deg,#ffad5c,#f05510);
-      border-radius: 20px 20px 0 0;
-      overflow: hidden;
-    }
-    .modal-media video, .modal-media img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-
-    .modal-body { padding: 14px 14px 18px; }
+    .modal-body { padding: 20px 16px 20px; }
 
     .modal-title {
       font-size: 0.9rem;
@@ -715,7 +705,7 @@
             <div class="card-body">
               <span class="card-cat">${esc(catLabel)}</span>
               <h2 class="card-name">${esc(p.name)}</h2>
-              <span class="card-cta">Shop items in this video →</span>
+              <span class="card-cta">Get links →</span>
             </div>
           </article>`;
       }
@@ -730,7 +720,7 @@
             <div class="card-body">
               <span class="card-cat">${esc(catLabel)}</span>
               <h2 class="card-name">${esc(p.name)}</h2>
-              <span class="card-cta">See deal →</span>
+              <span class="card-cta">Get link →</span>
             </div>
           </a>
         </article>`;
@@ -871,26 +861,16 @@
     });
 
     function openModal(p) {
-      const overlay   = document.getElementById('modal-overlay');
-      const mediaEl   = document.getElementById('modal-media');
-      const titleEl   = document.getElementById('modal-title');
-      const prodsEl   = document.getElementById('modal-products');
-      const related   = Array.isArray(p.related_products) ? p.related_products : [];
+      const overlay = document.getElementById('modal-overlay');
+      const titleEl = document.getElementById('modal-title');
+      const prodsEl = document.getElementById('modal-products');
+      const related = Array.isArray(p.related_products) ? p.related_products : [];
 
       titleEl.textContent = p.name;
-
-      if (p.video) {
-        mediaEl.innerHTML = `<video src="${esc(p.video)}" autoplay muted loop playsinline></video>`;
-      } else if (p.image) {
-        mediaEl.innerHTML = `<img src="${esc(p.image)}" alt="${esc(p.name)}">`;
-      } else {
-        mediaEl.innerHTML = `<div class="placeholder-media"><span>🔥</span></div>`;
-      }
-
       prodsEl.innerHTML = related.map(rp =>
         `<a href="${esc(rp.link)}" class="card-cta-multi"
             target="_blank" rel="noopener noreferrer sponsored">
-          ${esc(rp.label || 'Shop →')}
+          ${esc(rp.label || 'Get link →')}
         </a>`
       ).join('');
 
@@ -901,9 +881,7 @@
     function closeModal(e) {
       if (e && e.target !== document.getElementById('modal-overlay') &&
           !e.target.closest('.modal-close')) return;
-      const overlay = document.getElementById('modal-overlay');
-      overlay.querySelectorAll('video').forEach(v => { v.pause(); v.removeAttribute('src'); });
-      overlay.classList.remove('open');
+      document.getElementById('modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
 
@@ -919,7 +897,6 @@
   <div id="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true">
     <div class="modal-box">
       <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
-      <div class="modal-media" id="modal-media"></div>
       <div class="modal-body">
         <h3 class="modal-title" id="modal-title"></h3>
         <p class="modal-label">Shop items in this video</p>
