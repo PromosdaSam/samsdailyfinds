@@ -485,36 +485,90 @@
     }
     .load-more-btn:hover { background: var(--orange-dk); transform: translateY(-1px); }
 
-    /* ── Multi-product cards ──────────────────────────── */
-    .card-products {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 6px;
+    /* ── Modal popup (multi-product) ─────────────────── */
+    #modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    #modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--card);
+      border-radius: 20px;
+      max-width: 380px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
     }
 
-    .card-cta-multi {
-      display: block;
-      text-align: center;
-      padding: 6px 8px;
-      border-radius: 8px;
-      background: var(--orange-xlt);
-      color: var(--orange-dk);
-      font-size: 0.75rem;
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.32);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 0.95rem;
+      cursor: pointer;
+      z-index: 10;
+      line-height: 1;
+    }
+
+    .modal-media {
+      aspect-ratio: 9/16;
+      background: linear-gradient(160deg,#ffad5c,#f05510);
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+    }
+    .modal-media video, .modal-media img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .modal-body { padding: 14px 14px 18px; }
+
+    .modal-title {
+      font-size: 0.9rem;
       font-weight: 700;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
-    .card-cta-multi:hover { background: var(--orange); color: #fff; }
 
-    .card-multi-label {
+    .modal-label {
       font-size: 0.65rem;
       font-weight: 700;
       color: var(--text-3);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 2px;
+      margin-bottom: 8px;
     }
+
+    .modal-products { display: flex; flex-direction: column; gap: 7px; }
+
+    .card-cta-multi {
+      display: block;
+      text-align: center;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: var(--orange-xlt);
+      color: var(--orange-dk);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .card-cta-multi:hover { background: var(--orange); color: #fff; }
   </style>
 </head>
 <body>
@@ -653,20 +707,15 @@
       const related = Array.isArray(p.related_products) ? p.related_products : [];
 
       if (related.length > 1) {
-        // Compilação — vários botões, sem <a> wrapper no card inteiro
-        const buttons = related.map(rp =>
-          `<a href="${esc(rp.link)}" class="card-cta-multi"
-              target="_blank" rel="noopener noreferrer sponsored"
-              aria-label="${esc(rp.label || 'Shop item')} — see deal">${esc(rp.label || 'Shop →')}</a>`
-        ).join('');
+        // Compilação — card clicável abre popup com os links
         return `
-          <article class="product-card" data-category="${esc(p.category)}">
+          <article class="product-card" data-category="${esc(p.category)}"
+                   onclick="openModal(${esc(JSON.stringify(p))})" style="cursor:pointer">
             ${mediaBlock}
             <div class="card-body">
               <span class="card-cat">${esc(catLabel)}</span>
               <h2 class="card-name">${esc(p.name)}</h2>
-              <p class="card-multi-label">Shop items in this video</p>
-              <div class="card-products">${buttons}</div>
+              <span class="card-cta">Shop items in this video →</span>
             </div>
           </article>`;
       }
@@ -821,11 +870,63 @@
       render();
     });
 
+    function openModal(p) {
+      const overlay   = document.getElementById('modal-overlay');
+      const mediaEl   = document.getElementById('modal-media');
+      const titleEl   = document.getElementById('modal-title');
+      const prodsEl   = document.getElementById('modal-products');
+      const related   = Array.isArray(p.related_products) ? p.related_products : [];
+
+      titleEl.textContent = p.name;
+
+      if (p.video) {
+        mediaEl.innerHTML = `<video src="${esc(p.video)}" autoplay muted loop playsinline></video>`;
+      } else if (p.image) {
+        mediaEl.innerHTML = `<img src="${esc(p.image)}" alt="${esc(p.name)}">`;
+      } else {
+        mediaEl.innerHTML = `<div class="placeholder-media"><span>🔥</span></div>`;
+      }
+
+      prodsEl.innerHTML = related.map(rp =>
+        `<a href="${esc(rp.link)}" class="card-cta-multi"
+            target="_blank" rel="noopener noreferrer sponsored">
+          ${esc(rp.label || 'Shop →')}
+        </a>`
+      ).join('');
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+      if (e && e.target !== document.getElementById('modal-overlay') &&
+          !e.target.closest('.modal-close')) return;
+      const overlay = document.getElementById('modal-overlay');
+      overlay.querySelectorAll('video').forEach(v => { v.pause(); v.removeAttribute('src'); });
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
     fetch('products.json?v=' + Date.now())
       .then(r => r.json())
       .then(data => { PRODUCTS.push(...data); })
       .catch(() => {})
       .finally(() => { buildCategories(); renderNovidades(); render(); });
   </script>
+  <!-- Modal popup para cards com múltiplos produtos -->
+  <div id="modal-overlay" onclick="closeModal(event)" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      <div class="modal-media" id="modal-media"></div>
+      <div class="modal-body">
+        <h3 class="modal-title" id="modal-title"></h3>
+        <p class="modal-label">Shop items in this video</p>
+        <div class="modal-products" id="modal-products"></div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
