@@ -599,9 +599,9 @@
     </div>
   </header>
 
-  <!-- New This Week -->
-  <section class="novidades-section" id="novidades-section" aria-label="New this week" style="display:none">
-    <h2 class="novidades-label">New This Week</h2>
+  <!-- Newest -->
+  <section class="novidades-section" id="novidades-section" aria-label="Newest" style="display:none">
+    <h2 class="novidades-label">Newest</h2>
     <div class="novidades-strip" id="novidades-strip"></div>
   </section>
 
@@ -770,8 +770,10 @@
     }
 
     function renderNovidades() {
-      const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      const recentes = PRODUCTS.filter(p => p.date && new Date(p.date) >= cutoff);
+      const recentes = [...PRODUCTS]
+        .filter(p => p.date)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
       const section  = document.getElementById("novidades-section");
       const strip    = document.getElementById("novidades-strip");
       if (recentes.length === 0) return;
