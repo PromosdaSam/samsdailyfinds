@@ -593,11 +593,19 @@
         Facebook
       </a>
 
+      <a href="https://www.youtube.com/@SamsDailyFinds" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg class="pill-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true">
+          <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/>
+        </svg>
+        YouTube
+      </a>
+
     </div>
   </header>
 
-  <!-- New This Week -->
-  <section class="novidades-section" id="novidades-section" aria-label="New this week" style="display:none">
+  <!-- Newest -->
+  <section class="novidades-section" id="novidades-section" aria-label="Newest" style="display:none">
     <h2 class="novidades-label">Newest Products</h2>
     <div class="novidades-strip" id="novidades-strip"></div>
   </section>
@@ -766,8 +774,10 @@
     }
 
     function renderNovidades() {
-      const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-      const recentes = PRODUCTS.filter(p => p.date && new Date(p.date) >= cutoff);
+      const recentes = [...PRODUCTS]
+        .filter(p => p.date)
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 5);
       const section  = document.getElementById("novidades-section");
       const strip    = document.getElementById("novidades-strip");
       if (recentes.length === 0) return;
