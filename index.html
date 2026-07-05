@@ -24,7 +24,7 @@
       --orange-xlt:  #fff0e6;
       --bg:          #fff5ee;
       --card:        #ffffff;
-      --border:      #ffd8bb;
+      --border:      #e8a06a;
       --text:        #1a0800;
       --text-2:      #5c3010;
       --text-3:      #a06040;
@@ -46,11 +46,12 @@
 
     /* ── Hero ─────────────────────────────────────────── */
     .hero {
-      background: #ff7417;
+      background: #e16816b8;
       padding: 52px 20px 80px;
       text-align: center;
       border-bottom-left-radius: 50% 48px;
       border-bottom-right-radius: 50% 48px;
+      border-bottom: 5px solid var(--text-2);
       position: relative;
     }
 
@@ -94,9 +95,9 @@
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      background: rgba(255,255,255,0.45);
-      border: 2px solid rgba(0,0,0,0.14);
-      color: #ffffff;
+      background: var(--card);
+      border: 3px solid var(--border);
+      color: var(--text-2);
       text-decoration: none;
       padding: 10px 20px;
       border-radius: var(--radius-pill);
@@ -104,7 +105,7 @@
       font-weight: 600;
     }
 
-    .social-pill:hover { background: rgba(255,255,255,0.65); }
+    .social-pill:hover { border-color: var(--orange-lt); color: var(--orange); }
 
     .pill-icon {
       width: 19px;
@@ -139,7 +140,7 @@
     #search {
       width: 100%;
       padding: 13px 20px 13px 44px;
-      border: 2.5px solid var(--border);
+      border: 3px solid var(--border);
       border-radius: var(--radius-pill);
       font-size: 0.95rem;
       background: var(--card);
@@ -165,7 +166,7 @@
     .cat-btn {
       padding: 7px 15px;
       border-radius: var(--radius-pill);
-      border: 2px solid var(--border);
+      border: 3px solid var(--border);
       background: var(--card);
       color: var(--text-2);
       font-size: 0.84rem;
@@ -175,7 +176,7 @@
     }
 
     .cat-btn:hover { border-color: var(--orange-lt); color: var(--orange); }
-    .cat-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .cat-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; box-shadow: 0 2px 10px rgba(255,106,0,0.35); }
 
     /* ── Grid ─────────────────────────────────────────── */
     .grid {
@@ -199,7 +200,7 @@
     /* ── Product card ─────────────────────────────────── */
     .product-card {
       background: var(--card);
-      border: 2px solid var(--border);
+      border: 3px solid var(--border);
       border-radius: var(--radius-card);
       overflow: hidden;
       box-shadow: var(--shadow);
@@ -347,7 +348,7 @@
 
     /* ── Footer ───────────────────────────────────────── */
     footer {
-      background: #ff7417;
+      background: #e16816b8;
       color: rgba(255,255,255,0.72);
       text-align: center;
       padding: 26px 20px;
@@ -367,15 +368,18 @@
 
     /* ── Dark mode ────────────────────────────────────── */
     [data-theme="dark"] {
-      --bg:         #18181b;
-      --card:       #27272a;
-      --border:     #3d2e20;
+      --bg:         #2d2d2f;
+      --card:       #3a3a3d;
+      --border:     #6b4a30;
       --text:       #f0e8e0;
       --text-2:     #c8a070;
       --text-3:     #8a6050;
       --shadow:     0 2px 16px rgba(0,0,0,0.35);
       --shadow-hov: 0 8px 32px rgba(0,0,0,0.55);
     }
+
+    [data-theme="dark"] .hero,
+    [data-theme="dark"] footer { background: #f18e4bb8; }
 
     [data-theme="dark"] .card-cta {
       background: rgba(255,116,23,0.15);
@@ -415,7 +419,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 0.78rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--orange-dk);
       margin-bottom: 16px;
@@ -433,6 +437,7 @@
 
     .novidades-strip {
       display: flex;
+      justify-content: center;
       gap: 14px;
       overflow-x: auto;
       padding-bottom: 12px;
@@ -580,12 +585,20 @@
         Instagram
       </a>
 
+      <a href="https://www.facebook.com/samsdailyfindss" class="social-pill"
+         target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <svg class="pill-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true">
+          <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
+        </svg>
+        Facebook
+      </a>
+
     </div>
   </header>
 
   <!-- New This Week -->
   <section class="novidades-section" id="novidades-section" aria-label="New this week" style="display:none">
-    <h2 class="novidades-label">New This Week</h2>
+    <h2 class="novidades-label">Newest Products</h2>
     <div class="novidades-strip" id="novidades-strip"></div>
   </section>
 
@@ -616,7 +629,6 @@
   <footer>
     <div class="footer-links">
       <a href="/privacidade.html">Privacy Policy</a>
-      <a href="https://pinterest.com/promosdasam" target="_blank" rel="noopener noreferrer">Pinterest</a>
     </div>
     <p>© 2026 Sam's Daily Finds · Affiliate links help keep this project running at no cost to you</p>
   </footer>
@@ -683,7 +695,7 @@
       const media = p.video
         ? `<video data-src="${esc(p.video)}" muted loop playsinline preload="none" class="media-video"></video>`
         : p.image
-          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
+          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
       const mediaBlock = `
@@ -786,7 +798,7 @@
             loadVideo(entry.target);
             videoObserver.unobserve(entry.target);
           });
-        }, { rootMargin: '300px 0px' })
+        }, { rootMargin: '4000px 0px' })
       : null;
 
     function attachVideoLazy(container) {
