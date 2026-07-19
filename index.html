@@ -270,8 +270,32 @@
       transition: opacity 0.2s;
     }
 
-    .product-card:hover .play-icon { opacity: 1; }
-    .card-media.playing .play-icon { opacity: 0 !important; }
+    .card-media.has-video:hover .play-icon { opacity: 1; }
+
+    .card-media.has-video { cursor: pointer; }
+
+    .video-tooltip {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 14px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .card-media.has-video:hover .video-tooltip { opacity: 1; }
+    .video-tooltip span {
+      background: rgba(0,0,0,0.72);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
 
     @keyframes shimmer {
       0%   { background-position: 200% 0; }
@@ -553,6 +577,38 @@
 
     .modal-products { display: flex; flex-direction: column; gap: 7px; }
 
+    /* ── Video popup ──────────────────────────────────── */
+    #video-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    #video-modal-overlay.open { display: flex; }
+
+    .video-modal-box {
+      position: relative;
+      max-width: 380px;
+      width: 100%;
+      max-height: 88vh;
+      aspect-ratio: 9/16;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+      background: #000;
+    }
+
+    .video-modal-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
     .card-cta-multi {
       display: block;
       text-align: center;
@@ -700,20 +756,30 @@
                       .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     }
 
+    function posterUrl(p) {
+      if (p.video) return p.video.replace(/\.mp4(\?.*)?$/i, '_thumb.jpg');
+      return null;
+    }
+
     function cardHTML(p) {
       const catLabel = CAT_LABEL[p.category] || p.category;
-      const media = p.video
-        ? `<video data-src="${esc(p.video)}" muted loop playsinline preload="none" class="media-video"></video>`
+      const poster = posterUrl(p);
+      const fallback = p.image ? esc(p.image) : '';
+      const media = poster
+        ? `<img src="${esc(poster)}" ${fallback ? `onerror="this.onerror=null;this.src='${fallback}';"` : ''} loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
         : p.image
-          ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
+          ? `<img src="${esc(p.image)}" loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
+      const hasVideo = !!p.video;
       const mediaBlock = `
-        <div class="card-media">
+        <div class="card-media${hasVideo ? ' has-video' : ''}"${hasVideo ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))})"` : ''}>
           ${media}
+          ${hasVideo ? `
           <div class="play-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
           </div>
+          <div class="video-tooltip" aria-hidden="true"><span>Click to see the video</span></div>` : ''}
         </div>`;
 
       const related = Array.isArray(p.related_products) ? p.related_products : [];
@@ -766,7 +832,6 @@
       grid.innerHTML = toShow.map(cardHTML).join("");
       empty.style.display  = filtered.length === 0 ? "block" : "none";
       lmWrap.style.display = toShow.length < filtered.length ? "flex" : "none";
-      attachVideoHover(grid);
       attachVideoLazy(grid);
     }
 
@@ -785,7 +850,6 @@
       if (recentes.length === 0) return;
       strip.innerHTML = recentes.map(cardHTML).join("");
       section.style.display = "block";
-      attachVideoHover(strip);
       attachVideoLazy(strip);
     }
 
@@ -793,25 +857,6 @@
       el.classList.add('loaded');
       el.closest('.card-media')?.classList.add('media-loaded');
     }
-
-    function loadVideo(video) {
-      if (video.src || !video.dataset.src) return;
-      video.src = video.dataset.src;
-      video.load();
-      video.addEventListener('loadedmetadata', () => markLoaded(video), { once: true });
-      // Safety fallback: show after 3s even if loadedmetadata is slow
-      setTimeout(() => markLoaded(video), 3000);
-    }
-
-    const videoObserver = typeof IntersectionObserver !== 'undefined'
-      ? new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            loadVideo(entry.target);
-            videoObserver.unobserve(entry.target);
-          });
-        }, { rootMargin: '4000px 0px' })
-      : null;
 
     function attachVideoLazy(container) {
       container.querySelectorAll('img.media-img').forEach(img => {
@@ -822,46 +867,29 @@
           img.addEventListener('error', () => img.closest('.card-media')?.classList.add('media-loaded'), { once: true });
         }
       });
-      container.querySelectorAll('video[data-src]').forEach(video => {
-        if (videoObserver) {
-          videoObserver.observe(video);
-        } else {
-          loadVideo(video);
-        }
-      });
     }
 
-    function attachVideoHover(container) {
-      container.querySelectorAll('.card-media').forEach(media => {
-        const video = media.querySelector('video');
-        if (!video) return;
-        let timer = null;
+    function openVideoModal(event, videoSrc) {
+      event.preventDefault();
+      event.stopPropagation();
+      const overlay = document.getElementById('video-modal-overlay');
+      const video   = document.getElementById('video-modal-player');
+      video.src = videoSrc;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      video.play().catch(() => {});
+    }
 
-        const doPlay = () => {
-          video.play().catch(() => {});
-          media.classList.add('playing');
-        };
-
-        media.addEventListener('mouseenter', () => {
-          timer = setTimeout(() => {
-            if (!video.src && video.dataset.src) {
-              loadVideo(video);
-              video.addEventListener('canplay', doPlay, { once: true });
-            } else if (video.readyState >= 2) {
-              doPlay();
-            } else {
-              video.addEventListener('canplay', doPlay, { once: true });
-            }
-          }, 1000);
-        });
-
-        media.addEventListener('mouseleave', () => {
-          clearTimeout(timer);
-          video.pause();
-          video.currentTime = 0;
-          media.classList.remove('playing');
-        });
-      });
+    function closeVideoModal(e) {
+      if (e && e.target !== document.getElementById('video-modal-overlay') &&
+          !e.target.closest('.modal-close')) return;
+      const overlay = document.getElementById('video-modal-overlay');
+      const video   = document.getElementById('video-modal-player');
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     (function initTheme() {
@@ -909,7 +937,11 @@
       document.body.style.overflow = '';
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      closeModal();
+      closeVideoModal();
+    });
 
     fetch('products.json?v=' + Date.now())
       .then(r => r.json())
@@ -926,6 +958,14 @@
         <p class="modal-label">Shop items in this video</p>
         <div class="modal-products" id="modal-products"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Video popup -->
+  <div id="video-modal-overlay" onclick="closeVideoModal(event)" role="dialog" aria-modal="true">
+    <div class="video-modal-box">
+      <button class="modal-close" onclick="closeVideoModal()" aria-label="Close">✕</button>
+      <video id="video-modal-player" controls autoplay loop playsinline></video>
     </div>
   </div>
 
