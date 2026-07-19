@@ -25,7 +25,7 @@
       --bg:          #fff5ee;
       --card:        #ffffff;
       --border:      #ffa85c;
-      --text:        #50270b;
+      --text:        #7a401f;
       --text-2:      #993300;
       --text-3:      #e65c00;
       --radius-card: 16px;
@@ -46,7 +46,9 @@
 
     /* ── Hero ─────────────────────────────────────────── */
     .hero {
-      background: #e65400b8;
+      background:
+        linear-gradient(180deg, rgba(20,8,0,0.45), rgba(20,8,0,0.55)),
+        url('banner.jpg') center / cover no-repeat;
       padding: 52px 20px 80px;
       text-align: center;
       border-bottom-left-radius: 50% 48px;
@@ -56,8 +58,8 @@
     }
 
     .hero-logo {
-      width: clamp(90px, 20vw, 130px);
-      height: clamp(90px, 20vw, 130px);
+      width: clamp(120px, 28vw, 180px);
+      height: clamp(120px, 28vw, 180px);
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 14px;
@@ -404,8 +406,13 @@
       --shadow-hov: 0 8px 32px rgba(0,0,0,0.55);
     }
 
-    [data-theme="dark"] .hero,
     [data-theme="dark"] footer { background: #f18e4bb8; }
+
+    [data-theme="dark"] .hero {
+      background:
+        linear-gradient(180deg, rgba(10,4,0,0.6), rgba(10,4,0,0.68)),
+        url('banner.jpg') center / cover no-repeat;
+    }
 
     [data-theme="dark"] .card-cta {
       background: rgba(255,116,23,0.15);
@@ -422,13 +429,13 @@
       border: 2px solid var(--text-2);
       color: #fff;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 54px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
       line-height: 1;
     }
 
