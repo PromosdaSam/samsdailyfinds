@@ -801,7 +801,12 @@
           ? `<img src="${esc(p.image)}" loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
-      const hasVideo = !!p.video;
+      // 2026-07-25: popup de vídeo desativado no site internacional — os
+      // vídeos originais do P1 não têm áudio, então mostrar só a imagem
+      // estática (poster derivado do vídeo) e nunca abrir o popup (pedido
+      // explícito da usuária). posterUrl()/media acima continuam iguais —
+      // só o clique-pra-vídeo é que some.
+      const hasVideo = false;
       const mediaBlock = `
         <div class="card-media${hasVideo ? ' has-video' : ''}"${hasVideo ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"` : ''}>
           ${media}
