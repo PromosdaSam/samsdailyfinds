@@ -818,24 +818,19 @@
           ? `<img src="${esc(p.image)}" loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
-      // 2026-08-01: popup de vídeo reativado — desativado em 2026-07-25
-      // porque os vídeos do P1 não tinham áudio na época; narração foi
-      // trazida de volta em 2026-07-27 (portado do Projeto 4) e confirmada
-      // funcionando desde então, então a razão original não se aplica mais.
-      //
-      // ig_permalink (2026-08-01, pedido da usuária): quando não existe
-      // vídeo auto-hospedado (posts antigos cujo arquivo local se perdeu),
-      // clicar na capa abre a página real do post no Instagram em vez do
-      // popup interno — ig_permalink nunca expira (diferente do media_url
-      // temporário da Graph API), então não depende de baixar/rehospedar
-      // nada. hasVideo tem prioridade se os dois existirem.
-      const hasVideo   = !!p.video && /\.mp4(\?.*)?$/i.test(p.video);
-      const hasIgLink  = !hasVideo && !!p.ig_permalink;
-      const clickable  = hasVideo || hasIgLink;
-      const onclickAttr = hasVideo
-        ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"`
-        : hasIgLink
-          ? ` onclick="openInstagramLink(event, ${esc(JSON.stringify(p.ig_permalink))})"`
+      // 2026-08-01 (revisão, pedido da usuária): não corta/hospeda mais
+      // vídeo no site — clicar na capa sempre abre a página real do post
+      // no Instagram (ig_permalink, link permanente) em vez do popup
+      // interno. Popup interno (openVideoModal) fica só de fallback pra
+      // entradas antigas que só têm p.video e nunca tiveram ig_permalink
+      // gravado (não deveria mais acontecer pra posts novos).
+      const hasIgLink = !!p.ig_permalink;
+      const hasVideo  = !hasIgLink && !!p.video && /\.mp4(\?.*)?$/i.test(p.video);
+      const clickable = hasIgLink || hasVideo;
+      const onclickAttr = hasIgLink
+        ? ` onclick="openInstagramLink(event, ${esc(JSON.stringify(p.ig_permalink))})"`
+        : hasVideo
+          ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"`
           : '';
       const mediaBlock = `
         <div class="card-media${clickable ? ' has-video' : ''}"${onclickAttr}>
@@ -844,7 +839,7 @@
           <div class="play-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
           </div>
-          <div class="video-tooltip" aria-hidden="true"><span>${hasVideo ? 'Click to see the video' : 'Click to see the video on Instagram'}</span></div>` : ''}
+          <div class="video-tooltip" aria-hidden="true"><span>${hasIgLink ? 'Click to see the video on Instagram' : 'Click to see the video'}</span></div>` : ''}
         </div>`;
 
       const related = Array.isArray(p.related_products) ? p.related_products : [];
