@@ -802,7 +802,9 @@
     }
 
     function posterUrl(p) {
-      if (p.video) return p.video.replace(/\.mp4(\?.*)?$/i, '_thumb.jpg');
+      // Só deriva thumb de um vídeo .mp4 auto-hospedado — um ig_permalink
+      // (link da página do Instagram, não arquivo) não bate nesse padrão.
+      if (p.video && /\.mp4(\?.*)?$/i.test(p.video)) return p.video.replace(/\.mp4(\?.*)?$/i, '_thumb.jpg');
       return null;
     }
 
@@ -820,15 +822,29 @@
       // porque os vídeos do P1 não tinham áudio na época; narração foi
       // trazida de volta em 2026-07-27 (portado do Projeto 4) e confirmada
       // funcionando desde então, então a razão original não se aplica mais.
-      const hasVideo = !!p.video;
+      //
+      // ig_permalink (2026-08-01, pedido da usuária): quando não existe
+      // vídeo auto-hospedado (posts antigos cujo arquivo local se perdeu),
+      // clicar na capa abre a página real do post no Instagram em vez do
+      // popup interno — ig_permalink nunca expira (diferente do media_url
+      // temporário da Graph API), então não depende de baixar/rehospedar
+      // nada. hasVideo tem prioridade se os dois existirem.
+      const hasVideo   = !!p.video && /\.mp4(\?.*)?$/i.test(p.video);
+      const hasIgLink  = !hasVideo && !!p.ig_permalink;
+      const clickable  = hasVideo || hasIgLink;
+      const onclickAttr = hasVideo
+        ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"`
+        : hasIgLink
+          ? ` onclick="openInstagramLink(event, ${esc(JSON.stringify(p.ig_permalink))})"`
+          : '';
       const mediaBlock = `
-        <div class="card-media${hasVideo ? ' has-video' : ''}"${hasVideo ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"` : ''}>
+        <div class="card-media${clickable ? ' has-video' : ''}"${onclickAttr}>
           ${media}
-          ${hasVideo ? `
+          ${clickable ? `
           <div class="play-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
           </div>
-          <div class="video-tooltip" aria-hidden="true"><span>Click to see the video</span></div>` : ''}
+          <div class="video-tooltip" aria-hidden="true"><span>${hasVideo ? 'Click to see the video' : 'Click to see the video on Instagram'}</span></div>` : ''}
         </div>`;
 
       const related = Array.isArray(p.related_products) ? p.related_products : [];
@@ -916,6 +932,15 @@
           img.addEventListener('error', () => img.closest('.card-media')?.classList.add('media-loaded'), { once: true });
         }
       });
+    }
+
+    function openInstagramLink(event, permalink) {
+      // 2026-08-01: fallback pra posts sem vídeo auto-hospedado — abre a
+      // página real do post no Instagram (permalink não expira) em vez do
+      // popup interno.
+      event.preventDefault();
+      event.stopPropagation();
+      window.open(permalink, '_blank', 'noopener');
     }
 
     function openVideoModal(event, videoSrc, posterSrc) {
