@@ -599,11 +599,28 @@
     }
     #video-modal-overlay.open { display: flex; }
 
+    .video-modal-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .video-modal-caption {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
     .video-modal-box {
       position: relative;
       max-width: 380px;
       width: 100%;
-      max-height: 88vh;
+      max-height: 82vh;
       aspect-ratio: 9/16;
       border-radius: 16px;
       overflow: hidden;
@@ -799,12 +816,11 @@
           ? `<img src="${esc(p.image)}" loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
-      // 2026-07-25: popup de vídeo desativado no site internacional — os
-      // vídeos originais do P1 não têm áudio, então mostrar só a imagem
-      // estática (poster derivado do vídeo) e nunca abrir o popup (pedido
-      // explícito da usuária). posterUrl()/media acima continuam iguais —
-      // só o clique-pra-vídeo é que some.
-      const hasVideo = false;
+      // 2026-08-01: popup de vídeo reativado — desativado em 2026-07-25
+      // porque os vídeos do P1 não tinham áudio na época; narração foi
+      // trazida de volta em 2026-07-27 (portado do Projeto 4) e confirmada
+      // funcionando desde então, então a razão original não se aplica mais.
+      const hasVideo = !!p.video;
       const mediaBlock = `
         <div class="card-media${hasVideo ? ' has-video' : ''}"${hasVideo ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"` : ''}>
           ${media}
@@ -1003,10 +1019,13 @@
 
   <!-- Video popup -->
   <div id="video-modal-overlay" onclick="closeVideoModal(event)" role="dialog" aria-modal="true">
-    <div class="video-modal-box">
-      <button class="modal-close" onclick="closeVideoModal()" aria-label="Close">✕</button>
-      <div id="video-modal-spinner" class="video-modal-spinner" aria-hidden="true"></div>
-      <video id="video-modal-player" controls autoplay loop playsinline></video>
+    <div class="video-modal-wrap">
+      <div class="video-modal-caption">Check Instagram to see the full video</div>
+      <div class="video-modal-box">
+        <button class="modal-close" onclick="closeVideoModal()" aria-label="Close">✕</button>
+        <div id="video-modal-spinner" class="video-modal-spinner" aria-hidden="true"></div>
+        <video id="video-modal-player" controls autoplay loop playsinline></video>
+      </div>
     </div>
   </div>
 
