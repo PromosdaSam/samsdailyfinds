@@ -599,28 +599,11 @@
     }
     #video-modal-overlay.open { display: flex; }
 
-    .video-modal-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 380px;
-      width: 100%;
-    }
-
-    .video-modal-caption {
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 10px;
-      opacity: 0.9;
-    }
-
     .video-modal-box {
       position: relative;
       max-width: 380px;
       width: 100%;
-      max-height: 82vh;
+      max-height: 88vh;
       aspect-ratio: 9/16;
       border-radius: 16px;
       overflow: hidden;
@@ -737,7 +720,8 @@
 
   <footer>
     <div class="footer-links">
-      <a href="/privacidade.html">Privacy Policy</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms of Use</a>
     </div>
     <p>© 2026 Sam's Daily Finds · As an Amazon Associate I earn from qualifying purchases.</p>
   </footer>
@@ -802,9 +786,7 @@
     }
 
     function posterUrl(p) {
-      // Só deriva thumb de um vídeo .mp4 auto-hospedado — um ig_permalink
-      // (link da página do Instagram, não arquivo) não bate nesse padrão.
-      if (p.video && /\.mp4(\?.*)?$/i.test(p.video)) return p.video.replace(/\.mp4(\?.*)?$/i, '_thumb.jpg');
+      if (p.video) return p.video.replace(/\.mp4(\?.*)?$/i, '_thumb.jpg');
       return null;
     }
 
@@ -818,28 +800,20 @@
           ? `<img src="${esc(p.image)}" loading="lazy" alt="${esc(p.name)}" class="media-img" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="placeholder-media"><span>🔥</span><small>Click to see deal</small></div>`;
 
-      // 2026-08-01 (revisão, pedido da usuária): não corta/hospeda mais
-      // vídeo no site — clicar na capa sempre abre a página real do post
-      // no Instagram (ig_permalink, link permanente) em vez do popup
-      // interno. Popup interno (openVideoModal) fica só de fallback pra
-      // entradas antigas que só têm p.video e nunca tiveram ig_permalink
-      // gravado (não deveria mais acontecer pra posts novos).
-      const hasIgLink = !!p.ig_permalink;
-      const hasVideo  = !hasIgLink && !!p.video && /\.mp4(\?.*)?$/i.test(p.video);
-      const clickable = hasIgLink || hasVideo;
-      const onclickAttr = hasIgLink
-        ? ` onclick="openInstagramLink(event, ${esc(JSON.stringify(p.ig_permalink))})"`
-        : hasVideo
-          ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"`
-          : '';
+      // 2026-07-25: popup de vídeo desativado no site internacional — os
+      // vídeos originais do P1 não têm áudio, então mostrar só a imagem
+      // estática (poster derivado do vídeo) e nunca abrir o popup (pedido
+      // explícito da usuária). posterUrl()/media acima continuam iguais —
+      // só o clique-pra-vídeo é que some.
+      const hasVideo = false;
       const mediaBlock = `
-        <div class="card-media${clickable ? ' has-video' : ''}"${onclickAttr}>
+        <div class="card-media${hasVideo ? ' has-video' : ''}"${hasVideo ? ` onclick="openVideoModal(event, ${esc(JSON.stringify(p.video))}, ${esc(JSON.stringify(poster || p.image || ''))})"` : ''}>
           ${media}
-          ${clickable ? `
+          ${hasVideo ? `
           <div class="play-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
           </div>
-          <div class="video-tooltip" aria-hidden="true"><span>${hasIgLink ? 'Click to see the video on Instagram' : 'Click to see the video'}</span></div>` : ''}
+          <div class="video-tooltip" aria-hidden="true"><span>Click to see the video</span></div>` : ''}
         </div>`;
 
       const related = Array.isArray(p.related_products) ? p.related_products : [];
@@ -927,15 +901,6 @@
           img.addEventListener('error', () => img.closest('.card-media')?.classList.add('media-loaded'), { once: true });
         }
       });
-    }
-
-    function openInstagramLink(event, permalink) {
-      // 2026-08-01: fallback pra posts sem vídeo auto-hospedado — abre a
-      // página real do post no Instagram (permalink não expira) em vez do
-      // popup interno.
-      event.preventDefault();
-      event.stopPropagation();
-      window.open(permalink, '_blank', 'noopener');
     }
 
     function openVideoModal(event, videoSrc, posterSrc) {
@@ -1039,13 +1004,10 @@
 
   <!-- Video popup -->
   <div id="video-modal-overlay" onclick="closeVideoModal(event)" role="dialog" aria-modal="true">
-    <div class="video-modal-wrap">
-      <div class="video-modal-caption">Check Instagram to see the full video</div>
-      <div class="video-modal-box">
-        <button class="modal-close" onclick="closeVideoModal()" aria-label="Close">✕</button>
-        <div id="video-modal-spinner" class="video-modal-spinner" aria-hidden="true"></div>
-        <video id="video-modal-player" controls autoplay loop playsinline></video>
-      </div>
+    <div class="video-modal-box">
+      <button class="modal-close" onclick="closeVideoModal()" aria-label="Close">✕</button>
+      <div id="video-modal-spinner" class="video-modal-spinner" aria-hidden="true"></div>
+      <video id="video-modal-player" controls autoplay loop playsinline></video>
     </div>
   </div>
 
