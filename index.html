@@ -7,121 +7,178 @@
   <meta name="description" content="Smart curation of the best deals on Amazon and more. Updated in real time — click and save!">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://videos.samsdailyfinds.com; media-src 'self' blob: https://videos.samsdailyfinds.com; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://images-na.ssl-images-amazon.com https://m.media-amazon.com https://videos.samsdailyfinds.com; media-src 'self' blob: https://videos.samsdailyfinds.com; font-src 'self' https://fonts.gstatic.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests;">
   <meta property="og:title" content="🔥 Sam's Daily Finds — Top Products of the Day">
   <meta property="og:description" content="Smart curation of the best deals — click a product and grab yours!">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://samsdailyfinds.com/">
   <meta property="og:locale" content="en_US">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange:      #ff700a;
-      --orange-dk:   #d64f00;
-      --orange-lt:   #ffa85c;
-      --orange-xlt:  #fff0e5;
-      --bg:          #fff5ee;
+      --bg:          #f3f1ed;
+      --bg-2:        #ebe8e2;
       --card:        #ffffff;
-      --border:      #ffa85c;
-      --text:        #7a401f;
-      --text-2:      #993300;
-      --text-3:      #e65c00;
-      --radius-card: 16px;
+      --ink:         #17140f;
+      --ink-soft:    #6b665e;
+      --ink-faint:   #a39d92;
+      --border:      #17140f;
+      --border-soft: #ddd8cf;
+      --accent:      #ff6b4a;
+      --accent-soft: #fff1ec;
+      --check:       #1d9bf0;
+      --radius-card: 18px;
       --radius-pill: 100px;
-      --shadow:      0 2px 16px rgba(255,106,0,0.08);
-      --shadow-hov:  0 8px 32px rgba(255,106,0,0.16);
+      --shadow:      0 2px 14px rgba(20,20,15,0.06);
+      --shadow-hov:  0 10px 28px rgba(20,20,15,0.12);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--ink);
       min-height: 100vh;
       line-height: 1.5;
+      font-weight: 500;
     }
 
-    /* ── Hero ─────────────────────────────────────────── */
-    .hero {
-      background:
-        linear-gradient(180deg, rgba(15,6,0,0.58), rgba(15,6,0,0.68)),
-        url('banner.jpg') center / cover no-repeat;
-      padding: 52px 20px 80px;
+    /* ── Hero (bio-link style: banner + overlapping avatar) ── */
+    .hero { position: relative; }
+
+    .hero-banner {
+      width: 100%;
+      height: clamp(160px, 32vw, 300px);
+      object-fit: cover;
+      display: block;
+      border-bottom-left-radius: 42px;
+      border-bottom-right-radius: 42px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: rgba(255,255,255,0.85);
+      border: none;
+      color: var(--ink);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.25rem;
+      line-height: 1;
+      box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover { background: #fff; }
+
+    .hero-content {
+      background: var(--bg);
       text-align: center;
-      border-bottom-left-radius: 50% 48px;
-      border-bottom-right-radius: 50% 48px;
-      border-bottom: 5px solid var(--text-2);
-      position: relative;
+      padding: 0 20px 40px;
     }
 
-    .hero-logo {
-      width: clamp(120px, 28vw, 180px);
-      height: clamp(120px, 28vw, 180px);
+    .hero-avatar {
+      width: clamp(96px, 22vw, 128px);
+      height: clamp(96px, 22vw, 128px);
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 14px;
       display: block;
+      margin: -56px auto 16px;
+      border: 4px solid var(--bg);
+      box-shadow: var(--shadow-hov);
+      background: var(--card);
+    }
+
+    .hero-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: clamp(1.3rem, 4vw, 1.65rem);
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.2px;
+    }
+
+    .hero-name svg { width: 19px; height: 19px; flex-shrink: 0; }
+
+    .hero-tag {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      max-width: 380px;
       margin-inline: auto;
-      border: 4px solid var(--text-2);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
     }
 
-    .hero h1 {
-      font-size: clamp(1.6rem, 5vw, 2.4rem);
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.5px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.55), 0 1px 14px rgba(0,0,0,0.4);
-    }
-
-    .hero p {
-      margin-top: 10px;
-      font-size: clamp(0.88rem, 2.4vw, 1rem);
-      color: #ffffff;
-      max-width: 400px;
-      margin-inline: auto;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.55), 0 1px 10px rgba(0,0,0,0.4);
-    }
-
-    /* ── Social pills (no Telegram/WhatsApp for EN) ───── */
+    /* ── Social icons: rounded black badges ───────────────── */
     .social-row {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-top: 28px;
+      gap: 10px;
+      margin-top: 18px;
       flex-wrap: wrap;
     }
 
-    .social-pill {
-      display: inline-flex;
+    .social-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--ink);
+      color: var(--bg);
+      display: flex;
       align-items: center;
-      gap: 7px;
-      background: var(--card);
-      border: 3px solid var(--text-2);
-      color: var(--text-2);
+      justify-content: center;
       text-decoration: none;
-      padding: 10px 20px;
-      border-radius: var(--radius-pill);
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .social-pill:hover { border-color: var(--orange-lt); color: var(--orange); }
-
-    .pill-icon {
-      width: 19px;
-      height: 19px;
       flex-shrink: 0;
     }
+    .social-badge:hover { background: var(--accent); }
+    .social-badge svg { width: 17px; height: 17px; }
+
+    /* ── Pill CTA ─────────────────────────────────────────── */
+    .hero-ctas {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .pill-btn:hover { background: var(--ink); color: var(--bg); }
+    .pill-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .pill-btn.filled { background: var(--ink); color: var(--bg); }
+    .pill-btn.filled:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
     /* ── Controls ─────────────────────────────────────── */
     .controls {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 32px 20px 0;
+      padding: 8px 20px 0;
     }
 
     .search-wrap {
@@ -137,27 +194,25 @@
       transform: translateY(-50%);
       width: 17px;
       height: 17px;
-      color: var(--text-3);
+      color: var(--ink-faint);
       pointer-events: none;
     }
 
     #search {
       width: 100%;
       padding: 13px 20px 13px 44px;
-      border: 3px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius-pill);
+      font-family: inherit;
       font-size: 0.95rem;
+      font-weight: 500;
       background: var(--card);
-      color: var(--text);
+      color: var(--ink);
       outline: none;
     }
 
-    #search:focus {
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(255,106,0,0.12);
-    }
-
-    #search::placeholder { color: var(--text-3); }
+    #search:focus { box-shadow: 0 0 0 3px rgba(23,20,15,0.1); }
+    #search::placeholder { color: var(--ink-faint); }
 
     .cats {
       display: flex;
@@ -168,19 +223,20 @@
     }
 
     .cat-btn {
-      padding: 7px 15px;
+      padding: 8px 16px;
       border-radius: var(--radius-pill);
-      border: 3px solid var(--border);
+      border: 2px solid var(--border);
       background: var(--card);
-      color: var(--text-2);
+      color: var(--ink);
+      font-family: inherit;
       font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
     }
 
-    .cat-btn:hover { border-color: var(--orange-lt); color: var(--orange); }
-    .cat-btn.active { background: var(--text-2); border-color: var(--text-2); color: var(--card); box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+    .cat-btn:hover { background: var(--bg-2); }
+    .cat-btn.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
     /* ── Grid ─────────────────────────────────────────── */
     .grid {
@@ -195,313 +251,145 @@
     .empty {
       text-align: center;
       padding: 64px 20px;
-      color: var(--text-3);
+      color: var(--ink-soft);
       display: none;
     }
-
     .empty span { font-size: 3rem; display: block; margin-bottom: 12px; }
 
     /* ── Product card ─────────────────────────────────── */
     .product-card {
       background: var(--card);
-      border: 3px solid var(--border);
+      border: 1.5px solid var(--border-soft);
       border-radius: var(--radius-card);
       overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
     }
+    .product-card:hover { box-shadow: var(--shadow-hov); border-color: var(--ink); }
 
-    .product-card:hover {
-      box-shadow: var(--shadow-hov);
-      border-color: var(--orange-lt);
-    }
-
-    .card-link {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      text-decoration: none;
-      color: inherit;
-    }
+    .card-link { display: flex; flex-direction: column; flex: 1; text-decoration: none; color: inherit; }
 
     .card-media {
       aspect-ratio: 9/16;
-      background: linear-gradient(160deg, #ff9a4d, #d64700);
+      background: var(--bg-2);
       overflow: hidden;
       position: relative;
       flex-shrink: 0;
     }
 
-    .card-media video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .card-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .placeholder-media {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px; color: var(--ink-soft);
     }
-
-    .placeholder-media span {
-      font-size: 3rem;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
-    }
-
-    .placeholder-media small {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.72);
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
+    .placeholder-media span { font-size: 3rem; }
+    .placeholder-media small { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; }
 
     .play-icon {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.06);
-      opacity: 0;
-      transition: opacity 0.2s;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(23,20,15,0.06); opacity: 0; transition: opacity 0.2s;
     }
-
     .card-media.has-video:hover .play-icon { opacity: 1; }
-
     .card-media.has-video { cursor: pointer; }
 
     .video-tooltip {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 14px;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
-      z-index: 3;
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 14px; opacity: 0; transition: opacity 0.2s;
+      pointer-events: none; z-index: 3;
     }
     .card-media.has-video:hover .video-tooltip { opacity: 1; }
     .video-tooltip span {
-      background: rgba(0,0,0,0.72);
-      color: #fff;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-      padding: 5px 10px;
-      border-radius: 999px;
+      background: var(--ink); color: var(--bg);
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2px;
+      padding: 5px 10px; border-radius: 999px;
     }
 
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     .card-media::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.18) 50%, transparent 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s ease-in-out infinite;
-      z-index: 1;
-      pointer-events: none;
-      transition: opacity 0.35s;
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.5) 50%, transparent 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite;
+      z-index: 1; pointer-events: none; transition: opacity 0.35s;
     }
     .card-media.media-loaded::before { opacity: 0; animation: none; }
 
-    .card-media img, .card-media video {
-      opacity: 0;
-      transition: opacity 0.45s;
-      position: relative;
-      z-index: 2;
-    }
+    .card-media img, .card-media video { opacity: 0; transition: opacity 0.45s; position: relative; z-index: 2; }
     .card-media img.loaded, .card-media video.loaded { opacity: 1; }
 
-    .play-icon svg {
-      width: 42px;
-      height: 42px;
-      fill: rgba(255,255,255,0.9);
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.28));
-    }
+    .play-icon svg { width: 42px; height: 42px; fill: rgba(255,255,255,0.92); filter: drop-shadow(0 2px 8px rgba(0,0,0,0.28)); }
 
-    .card-body {
-      padding: 11px 12px 13px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      flex: 1;
-    }
+    .card-body { padding: 11px 12px 13px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
 
-    .card-cat {
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--text-2);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .card-cat { font-size: 0.66rem; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.5px; }
 
     .card-name {
-      font-size: 0.86rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.35;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 2.7em;
+      font-size: 0.86rem; font-weight: 600; color: var(--ink); line-height: 1.35;
+      display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; min-height: 2.7em;
     }
 
     .card-cta {
-      display: block;
-      text-align: center;
-      margin-top: 6px;
-      padding: 8px;
-      border-radius: 8px;
-      background: var(--orange-xlt);
-      color: var(--orange-dk);
-      font-size: 0.78rem;
-      font-weight: 700;
+      display: block; text-align: center; margin-top: 6px; padding: 8px;
+      border-radius: 10px; background: var(--accent-soft); color: var(--accent);
+      font-size: 0.78rem; font-weight: 700;
     }
-
-    .product-card:hover .card-cta { background: var(--border); color: #fff; }
+    .product-card:hover .card-cta { background: var(--ink); color: var(--bg); }
 
     /* ── Footer ───────────────────────────────────────── */
-    footer {
-      background: #e65400b8;
-      color: rgba(255,255,255,0.72);
-      text-align: center;
-      padding: 26px 20px;
-      font-size: 0.82rem;
-    }
-
-    footer a { color: rgba(255,255,255,0.88); text-decoration: none; }
+    footer { background: var(--ink); color: rgba(243,241,237,0.72); text-align: center; padding: 26px 20px; font-size: 0.82rem; }
+    footer a { color: rgba(243,241,237,0.92); text-decoration: none; }
     footer a:hover { color: #fff; text-decoration: underline; }
-
-    footer .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
+    footer .footer-links { display: flex; justify-content: center; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
 
     /* ── Dark mode ────────────────────────────────────── */
     [data-theme="dark"] {
-      --bg:         #2d2d2f;
-      --card:       #3a3a3d;
-      --border:     #7e4c25;
-      --text:       #f0e8e0;
-      --text-2:     #d7a16a;
-      --text-3:     #b17343;
-      --shadow:     0 2px 16px rgba(0,0,0,0.35);
-      --shadow-hov: 0 8px 32px rgba(0,0,0,0.55);
+      --bg:          #17140f;
+      --bg-2:        #221e17;
+      --card:        #221e17;
+      --ink:         #f3f1ed;
+      --ink-soft:    #b4ac9d;
+      --ink-faint:   #756e60;
+      --border:      #f3f1ed;
+      --border-soft: #3a352b;
+      --accent-soft: rgba(255,107,74,0.14);
     }
-
-    [data-theme="dark"] footer { background: #f18e4bb8; }
-
-    [data-theme="dark"] .hero {
-      background:
-        linear-gradient(180deg, rgba(10,4,0,0.6), rgba(10,4,0,0.68)),
-        url('banner.jpg') center / cover no-repeat;
-    }
-
-    [data-theme="dark"] .card-cta {
-      background: rgba(255,116,23,0.15);
-      color: var(--orange-lt);
-    }
+    [data-theme="dark"] footer { background: #0e0c08; }
+    [data-theme="dark"] .theme-toggle { background: rgba(34,30,23,0.85); color: var(--ink); }
+    [data-theme="dark"] .theme-toggle:hover { background: #221e17; }
 
     body { transition: background 0.25s, color 0.25s; }
 
-    .theme-toggle {
-      position: absolute;
-      top: 16px;
-      right: 20px;
-      background: rgba(255,255,255,0.18);
-      border: 2px solid var(--text-2);
-      color: #fff;
-      border-radius: 50%;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-
-    .theme-toggle:hover { background: rgba(255,255,255,0.32); }
-
-    /* ── New This Week ────────────────────────────────── */
-    .novidades-section {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px 20px 8px;
-    }
-
+    /* ── Newest ────────────────────────────────────────── */
+    .novidades-section { max-width: 1100px; margin: 0 auto; padding: 32px 20px 8px; }
     .novidades-label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--text-2);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      display: flex; align-items: center; gap: 12px; font-size: 1.05rem; font-weight: 700;
+      color: var(--ink); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.6px;
     }
-
-    .novidades-label::after {
-      content: '';
-      flex: 1;
-      height: 2px;
-      background: var(--text-2);
-      border-radius: 2px;
-    }
+    .novidades-label::after { content: ''; flex: 1; height: 2px; background: var(--border-soft); border-radius: 2px; }
 
     .novidades-strip {
-      display: flex;
-      justify-content: flex-start;
-      gap: 14px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+      display: flex; justify-content: flex-start; gap: 14px; overflow-x: auto;
+      padding-bottom: 12px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
     }
-
     .novidades-strip::-webkit-scrollbar { height: 4px; }
-    .novidades-strip::-webkit-scrollbar-track { background: var(--border); border-radius: 4px; }
-    .novidades-strip::-webkit-scrollbar-thumb { background: var(--orange-lt); border-radius: 4px; }
-
-    .novidades-strip .product-card {
-      min-width: 160px;
-      max-width: 190px;
-      flex-shrink: 0;
-      scroll-snap-align: start;
-    }
+    .novidades-strip::-webkit-scrollbar-track { background: var(--border-soft); border-radius: 4px; }
+    .novidades-strip::-webkit-scrollbar-thumb { background: var(--ink-faint); border-radius: 4px; }
+    .novidades-strip .product-card { min-width: 160px; max-width: 190px; flex-shrink: 0; scroll-snap-align: start; }
 
     /* ── Responsive ───────────────────────────────────── */
     @media (max-width: 600px) {
-      .hero { padding: 40px 16px 64px; }
       .grid { grid-template-columns: repeat(2, 1fr); gap: 11px; padding-inline: 12px; }
       .card-body { padding: 9px 10px 11px; }
+      .hero-ctas { gap: 8px; }
     }
 
     .result-count {
       text-align: center;
       font-size: 0.78rem;
-      color: var(--text-3);
+      color: var(--ink-faint);
       padding-bottom: 12px;
       font-weight: 600;
     }
@@ -512,179 +400,119 @@
       padding: 28px 0 40px;
     }
     .load-more-btn {
-      background: var(--orange);
-      color: #fff;
-      border: none;
+      background: transparent;
+      color: var(--ink);
+      border: 2px solid var(--border);
       border-radius: var(--radius-pill);
       padding: 13px 36px;
+      font-family: inherit;
       font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       letter-spacing: 0.3px;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
     }
-    .load-more-btn:hover { background: var(--border); color: #fff; transform: translateY(-1px); }
+    .load-more-btn:hover { background: var(--ink); color: var(--bg); transform: translateY(-1px); }
 
     /* ── Modal popup (multi-product) ─────────────────── */
     #modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      position: fixed; inset: 0; background: rgba(23,20,15,0.65); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 16px;
     }
     #modal-overlay.open { display: flex; }
 
     .modal-box {
       background: var(--card);
+      border: 1.5px solid var(--border-soft);
       border-radius: 20px;
       max-width: 380px;
       width: 100%;
       max-height: 88vh;
       overflow-y: auto;
       position: relative;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
     }
 
     .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0,0,0,0.32);
-      border: none;
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      font-size: 0.95rem;
-      cursor: pointer;
-      z-index: 10;
-      line-height: 1;
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(23,20,15,0.14); border: none; color: var(--ink);
+      width: 30px; height: 30px; border-radius: 50%; font-size: 0.95rem;
+      cursor: pointer; z-index: 10; line-height: 1;
     }
 
     .modal-body { padding: 20px 16px 20px; }
 
-    .modal-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-      line-height: 1.3;
-    }
+    .modal-title { font-size: 0.9rem; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.3; }
 
     .modal-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      font-size: 0.65rem; font-weight: 700; color: var(--ink-faint);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
     }
 
     .modal-products { display: flex; flex-direction: column; gap: 7px; }
 
     /* ── Video popup ──────────────────────────────────── */
     #video-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      position: fixed; inset: 0; background: rgba(23,20,15,0.82); z-index: 1000;
+      display: none; align-items: center; justify-content: center; padding: 16px;
     }
     #video-modal-overlay.open { display: flex; }
 
     .video-modal-box {
-      position: relative;
-      max-width: 380px;
-      width: 100%;
-      max-height: 88vh;
-      aspect-ratio: 9/16;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.45);
-      background: #000;
+      position: relative; max-width: 380px; width: 100%; max-height: 88vh;
+      aspect-ratio: 9/16; border-radius: 18px; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.45); background: #000;
     }
-
-    .video-modal-box video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
+    .video-modal-box video { width: 100%; height: 100%; object-fit: contain; display: block; }
 
     .video-modal-spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 38px;
-      height: 38px;
-      margin: -19px 0 0 -19px;
-      border: 4px solid rgba(255,255,255,0.25);
-      border-top-color: #fff;
-      border-radius: 50%;
-      display: none;
-      animation: spin 0.8s linear infinite;
-      z-index: 5;
-      pointer-events: none;
+      position: absolute; top: 50%; left: 50%; width: 38px; height: 38px;
+      margin: -19px 0 0 -19px; border: 4px solid rgba(255,255,255,0.25);
+      border-top-color: #fff; border-radius: 50%; display: none;
+      animation: spin 0.8s linear infinite; z-index: 5; pointer-events: none;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .card-cta-multi {
-      display: block;
-      text-align: center;
-      padding: 9px 12px;
-      border-radius: 10px;
-      background: var(--orange-xlt);
-      color: var(--orange-dk);
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
+      display: block; text-align: center; padding: 9px 12px; border-radius: 10px;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: 0.82rem; font-weight: 700; text-decoration: none;
       transition: background 0.15s, color 0.15s;
     }
-    .card-cta-multi:hover { background: var(--border); color: #fff; }
+    .card-cta-multi:hover { background: var(--ink); color: var(--bg); }
   </style>
 </head>
 <body>
 
   <header class="hero" role="banner">
+    <img src="banner.jpg" class="hero-banner" alt="">
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
-    <img src="logo.png" class="hero-logo" alt="Sam's Daily Finds Logo">
-    <h1>Sam's Daily Finds</h1>
-    <p>Top products of the day, curated for you, everyday!</p>
 
-    <!-- No Telegram / WhatsApp for the international version -->
-    <div class="social-row" aria-label="Follow us">
+    <div class="hero-content">
+      <img src="logo.png" class="hero-avatar" alt="Sam's Daily Finds Logo">
 
-      <a href="https://instagram.com/SamsDailyFinds" class="social-pill"
-         target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <svg class="pill-icon" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
-          <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
-        </svg>
-        Instagram
-      </a>
+      <h1 class="hero-name">
+        Sam's Daily Finds
+        <svg viewBox="0 0 24 24" fill="var(--check)" aria-hidden="true"><path d="M12 1.5 14.4 4l3.3-1L18.6 6l3.4.9-.9 3.4 2.4 2.4-2.4 2.4.9 3.4-3.4.9-1 3.4-3.3-1L12 22.5 9.6 20l-3.3 1-1-3.4-3.4-.9.9-3.4L.4 10.7l2.4-2.4-.9-3.4L5.3 4l1-3.4L9.6 4z"/><path fill="var(--bg)" stroke="var(--bg)" stroke-width="1" d="m8.2 12 2.6 2.6 5-5"/></svg>
+      </h1>
+      <p class="hero-tag">Top products of the day, curated for you, everyday!</p>
 
-      <a href="https://www.facebook.com/samsdailyfindss" class="social-pill"
-         target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-        <svg class="pill-icon" viewBox="0 0 320 512" fill="currentColor" aria-hidden="true">
-          <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
-        </svg>
-        Facebook
-      </a>
+      <!-- No Telegram / WhatsApp for the international version -->
+      <div class="social-row" aria-label="Follow us">
+        <a href="https://instagram.com/SamsDailyFinds" class="social-badge" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/samsdailyfindss" class="social-badge" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 320 512" fill="currentColor" aria-hidden="true"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@SamsDailyFinds" class="social-badge" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg viewBox="0 0 576 512" fill="currentColor" aria-hidden="true"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
+        </a>
+      </div>
 
-      <a href="https://www.youtube.com/@SamsDailyFinds" class="social-pill"
-         target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-        <svg class="pill-icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true">
-          <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/>
-        </svg>
-        YouTube
-      </a>
-
+      <div class="hero-ctas">
+        <a href="#deals" class="pill-btn filled">— shop today's deals</a>
+      </div>
     </div>
   </header>
 
@@ -695,7 +523,7 @@
   </section>
 
   <!-- Search and filters -->
-  <section class="controls" aria-label="Filters and search">
+  <section class="controls" id="deals" aria-label="Filters and search">
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
